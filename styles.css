@@ -38,6 +38,7 @@ h1 {
 	border: 2px solid #ccc;
 	text-align: center;
 	font-size: 12px;
+	background-image: url('svg/chair-a.svg');
 }
 
 .a:hover, .s:hover {
@@ -59,6 +60,7 @@ h1 {
 #seating .label {
 	border: 2px solid #fff;
 	text-transform: uppercase;
+	background-image: none;
 }
 
 #left, #right {
