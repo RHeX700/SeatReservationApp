@@ -82,7 +82,7 @@ for(i = 0; i < 20; i++){
     });
 
     document.querySelectorAll("#seating section div").forEach((chair) => {
-        if(chair.innerHTML === "R"){
+        if(chair.innerHTML === "R" || chair.className == "label"){
             chair.removeEventListener('click', selectSeat);
             chair.removeEventListener("mouseover", hoverSeat);
             chair.removeEventListener("mouseout", unhoverSeat);
@@ -91,39 +91,32 @@ for(i = 0; i < 20; i++){
     });
 
     function selectSeat(event){
-        if(event.target.innerHTML !== "R"){
-            let chair_id = event.target.getAttribute('id');
-            if(selectedSeats.includes(chair_id)){
-                
-            }else{
-                console.log(chair_id);
-                selectedSeats.push(chair_id);
-                console.log(selectedSeats);
-                event.target.addEventListener('click', unselectSeat);
-                event.target.removeEventListener("mouseover", hoverSeat);
-                event.target.removeEventListener("mouseout", unhoverSeat);
-                event.target.style.backgroundImage = "url('svg/chair-s.svg')";  
-            }
+        let chair_id = event.target.getAttribute('id');
+        console.log(chair_id);
+        selectedSeats.push(chair_id);
+        console.log(selectedSeats);
+        event.target.removeEventListener("click", selectSeat);
+        event.target.addEventListener('click', unselectSeat);
+        event.target.style.backgroundImage = "url('svg/chair-s.svg')"; 
+        event.target.removeEventListener("mouseover", hoverSeat);
+        event.target.removeEventListener("mouseout", unhoverSeat); 
 
-        }
     }
 
     function unselectSeat(event){
-        if (event.target.innerHTML !== "R") {
-          let chair_id = event.target.getAttribute("id");
-          if (selectedSeats.includes(chair_id)) {
-            let index = selectedSeats.indexOf(chair_id);
-            console.log(index);
-            selectedSeats = selectedSeats
-              .slice(0, index)
-              .concat(selectedSeats.slice(index + 1));
-            console.log(selectedSeats);
-            event.target.addEventListener('click', selectSeat);
-            event.target.addEventListener("mouseover", hoverSeat);
-            event.target.addEventListener("mouseout", unhoverSeat);
-            event.target.style.backgroundImage = "url('svg/chair-a.svg')";
-          }
-        }        
+        let chair_id = event.target.getAttribute("id");
+        let index = selectedSeats.indexOf(chair_id);
+        console.log(index);
+        selectedSeats = selectedSeats
+            .slice(0, index)
+            .concat(selectedSeats.slice(index + 1));
+        console.log(selectedSeats);
+        event.target.removeEventListener("click", unselectSeat);
+        event.target.addEventListener('click', selectSeat);
+        event.target.addEventListener("mouseover", hoverSeat);
+        event.target.addEventListener("mouseout", unhoverSeat);
+        event.target.style.backgroundImage = "url('svg/chair-a.svg')";
+        
     }
 
     function hoverSeat(event){
@@ -132,5 +125,37 @@ for(i = 0; i < 20; i++){
 
     function unhoverSeat(event){
         event.target.style.backgroundImage = "url('svg/chair-a.svg')";
+    }
+
+    document.getElementById('reserve').addEventListener('click', (event) => {
+        event.preventDefault();
+        document.getElementById('resform').style.display = 'block';
+        manageConfirmForm();
+    });
+
+    document.getElementById('cancel').addEventListener('click', event => {
+        event.preventDefault();
+        document.getElementById("resform").style.display = "none";
+    });
+
+    function manageConfirmForm() {
+        if(selectedSeats.length === 0){
+            document.getElementById("confirmres").style.display = "none";
+            document.getElementById("selectedseats").innerHTML = 'You need to select some seats to reserve.<br><a href="#" id="error">Close</a> this dialog box and pick at least one';
+            document
+              .getElementById("error")
+              .addEventListener("click", (event) => {
+                event.preventDefault();
+                document.getElementById("resform").style.display = "none";
+              });
+        }else{
+            document.getElementById("confirmres").style.display = "block";
+            if (selectedSeats.length === 1) {
+                document.getElementById("selectedseats").innerHTML = "You have selected a seat";
+            } else {
+                document.getElementById("selectedseats").innerHTML = `You have selected ${selectedSeats.length} seats`;
+            }
+            
+        }
     }
  }());
