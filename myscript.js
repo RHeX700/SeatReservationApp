@@ -79,6 +79,13 @@ for(i = 0; i < 20; i++){
         chair.addEventListener('click', selectSeat);
     });
 
+    document.querySelectorAll("#seating section div").forEach((chair) => {
+        if(chair.innerHTML === "R"){
+            chair.removeEventListener('click', selectSeat);
+        }
+        
+    });
+
     function selectSeat(event){
         if(event.target.innerHTML !== "R"){
             let chair_id = event.target.getAttribute('id');
