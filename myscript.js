@@ -77,11 +77,15 @@ for(i = 0; i < 20; i++){
 
     document.querySelectorAll("#seating section div").forEach(chair =>{
         chair.addEventListener('click', selectSeat);
+        chair.addEventListener('mouseover', hoverSeat);
+        chair.addEventListener('mouseout', unhoverSeat);
     });
 
     document.querySelectorAll("#seating section div").forEach((chair) => {
         if(chair.innerHTML === "R"){
             chair.removeEventListener('click', selectSeat);
+            chair.removeEventListener("mouseover", hoverSeat);
+            chair.removeEventListener("mouseout", unhoverSeat);
         }
         
     });
@@ -96,6 +100,8 @@ for(i = 0; i < 20; i++){
                 selectedSeats.push(chair_id);
                 console.log(selectedSeats);
                 event.target.addEventListener('click', unselectSeat);
+                event.target.removeEventListener("mouseover", hoverSeat);
+                event.target.removeEventListener("mouseout", unhoverSeat);
                 event.target.style.backgroundImage = "url('svg/chair-s.svg')";  
             }
 
@@ -113,8 +119,18 @@ for(i = 0; i < 20; i++){
               .concat(selectedSeats.slice(index + 1));
             console.log(selectedSeats);
             event.target.addEventListener('click', selectSeat);
+            event.target.addEventListener("mouseover", hoverSeat);
+            event.target.addEventListener("mouseout", unhoverSeat);
             event.target.style.backgroundImage = "url('svg/chair-a.svg')";
           }
         }        
+    }
+
+    function hoverSeat(event){
+        event.target.style.backgroundImage = "url('svg/chair-h.svg')";
+    }
+
+    function unhoverSeat(event){
+        event.target.style.backgroundImage = "url('svg/chair-a.svg')";
     }
  }());
