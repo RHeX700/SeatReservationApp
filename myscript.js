@@ -62,8 +62,52 @@ for(i = 0; i < 20; i++){
     rightSection.innerHTML += `<div class="label">${currentLabel.toUpperCase()}</div>`;
 }
 
-for (const key in reservedSeats){
-    var chair = document.getElementById(reservedSeats[key].seat);
-    chair.style.backgroundImage = "url('svg/chair-r.svg')";
-    chair.innerText = "R";
-}
+(function () { 
+
+    "use strict";
+
+    for (const key in reservedSeats){
+        var chair = document.getElementById(reservedSeats[key].seat);
+        // chair.className = 'r';
+        chair.style.backgroundImage = "url('svg/chair-r.svg')";
+        chair.innerText = "R";
+    }
+
+    var selectedSeats = [];
+
+    document.querySelectorAll("#seating section div").forEach(chair =>{
+        chair.addEventListener('click', selectSeat);
+    });
+
+    function selectSeat(event){
+        if(event.target.innerHTML !== "R"){
+            let chair_id = event.target.getAttribute('id');
+            if(selectedSeats.includes(chair_id)){
+                
+            }else{
+                console.log(chair_id);
+                selectedSeats.push(chair_id);
+                console.log(selectedSeats);
+                event.target.addEventListener('click', unselectSeat);
+                event.target.style.backgroundImage = "url('svg/chair-s.svg')";  
+            }
+
+        }
+    }
+
+    function unselectSeat(event){
+        if (event.target.innerHTML !== "R") {
+          let chair_id = event.target.getAttribute("id");
+          if (selectedSeats.includes(chair_id)) {
+            let index = selectedSeats.indexOf(chair_id);
+            console.log(index);
+            selectedSeats = selectedSeats
+              .slice(0, index)
+              .concat(selectedSeats.slice(index + 1));
+            console.log(selectedSeats);
+            event.target.addEventListener('click', selectSeat);
+            event.target.style.backgroundImage = "url('svg/chair-a.svg')";
+          }
+        }        
+    }
+ }());
