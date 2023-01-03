@@ -141,7 +141,8 @@ for(i = 0; i < 20; i++){
     function manageConfirmForm() {
         if(selectedSeats.length === 0){
             document.getElementById("confirmres").style.display = "none";
-            document.getElementById("selectedseats").innerHTML = 'You need to select some seats to reserve.<br><a href="#" id="error">Close</a> this dialog box and pick at least one';
+            document.getElementById("selectedseats").innerHTML = 
+            'You need to select some seats to reserve.<br><a href="#" id="error">Close</a> this dialog box and pick at least one';
             document
               .getElementById("error")
               .addEventListener("click", (event) => {
@@ -151,11 +152,46 @@ for(i = 0; i < 20; i++){
         }else{
             document.getElementById("confirmres").style.display = "block";
             if (selectedSeats.length === 1) {
-                document.getElementById("selectedseats").innerHTML = "You have selected a seat";
+                document.getElementById("selectedseats").innerHTML =
+                  `You have selected seat ${selectedSeats.toString()}`;
             } else {
-                document.getElementById("selectedseats").innerHTML = `You have selected ${selectedSeats.length} seats`;
+                document.getElementById("selectedseats").innerHTML = `You have selected seats ${selectedSeats.toString()}`;
             }
             
         }
     }
+
+    document.getElementById("confirmbtn").addEventListener("click", (event) => {
+      event.preventDefault();
+      processReservation();
+    });
+
+    let processReservation = () => {
+        const hardCodeRecords = Object.keys(reservedSeats).length;
+        const fname = document.getElementById("fname").value;
+        const lname = document.getElementById("lname").value;
+        let counter = 1;
+        let nextRecord = '';
+
+        selectedSeats.forEach(eachSeat => {
+            let thisSeat = document.getElementById(eachSeat);
+            thisSeat.style.backgroundImage = "url('svg/chair-r.svg')";
+            thisSeat.innerText = "R";
+            thisSeat.removeEventListener("click", selectSeat);
+            thisSeat.removeEventListener("mouseover", hoverSeat);
+            thisSeat.removeEventListener("mouseout", unhoverSeat);
+
+            nextRecord = `record${hardCodeRecords + counter}`;
+            reservedSeats[nextRecord] = {
+                seat:eachSeat,
+                owner: {
+                    fname:fname,
+                    lname:lname
+                }
+            }
+            counter++;    
+        });
+        document.getElementById("resform").style.display = "none";
+        selectedSeats = [];
+    };
  }());
